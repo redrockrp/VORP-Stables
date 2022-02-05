@@ -26,10 +26,20 @@ namespace vorpstables_cl
             EventHandlers["vorpstables:GetMyComplements"] += new Action<string>(GetMyComplements);
 
             EventHandlers["vorp:SelectedCharacter"] += new Action<int>((charId) => { TriggerServerEvent("vorpstables:LoadMyStables"); });
-            
+
             Tick += onCallHorse;
             Tick += onHorseDead;
             Tick += timeToRespawn;
+            Setup();
+        }
+
+        public static void Setup()
+        {
+            API.RegisterCommand("wheremypony", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                Debug.WriteLine("Where my pony");
+                TriggerServerEvent("vorp_stable:reload");
+            }), false);
         }
 
         [Tick]
@@ -49,11 +59,11 @@ namespace vorpstables_cl
         private async Task onHorseDead()
         {
 
-            if (spawnedHorse == null || spawnedHorse.Item1 == -1) 
+            if (spawnedHorse == null || spawnedHorse.Item1 == -1)
             {
 
             }
-            else 
+            else
             {
                 if (!API.IsEntityDead(spawnedHorse.Item1) && API.DoesEntityExist(spawnedHorse.Item1) && horsespawned)
                 {
@@ -91,7 +101,7 @@ namespace vorpstables_cl
         {
             MyComps.Clear();
             JArray jComps = JArray.Parse(comps);
-            foreach(var jc in jComps)
+            foreach (var jc in jComps)
             {
                 MyComps.Add(ConvertValue(jc.ToString()));
             }
@@ -112,7 +122,7 @@ namespace vorpstables_cl
 
             if (API.IsControlPressed(0, 0xE16B9AAD))
             {
-                if(API.IsControlPressed(0, 0xD9D0E1C0))
+                if (API.IsControlPressed(0, 0xD9D0E1C0))
                 {
                     Random rnd = new Random();
                     if (rnd.Next(0, 100) > GetConfig.Config["HorseSkillPullUpFailPercent"].ToObject<int>())
@@ -248,16 +258,20 @@ namespace vorpstables_cl
             {
                 if (API.DoesEntityExist(spawnedHorse.Item1) && spawnedHorse.Item1 != -1) // if spawned
                 {
+                    Debug.WriteLine("Horse spawned");
                     if (Function.Call<bool>((Hash)0xAAB0FE202E9FC9F0, spawnedHorse.Item1, -1))
                     {
+                        Debug.WriteLine("Horse seat free");
                         if (getHorseDistance(spawnedHorse.Item1) < GetConfig.Config["DistanceToTeleport"].ToObject<float>())
                         {
+                            Debug.WriteLine("Horse going?");
                             int pPID = API.PlayerPedId();
                             await GetControlOfEntity(spawnedHorse.Item1);
                             Function.Call((Hash)0x6A071245EB0D1882, spawnedHorse.Item1, pPID, -1, 5.0F, 2.0F, 0F, 0);
                         }
                         else
                         {
+                            Debug.WriteLine("Horse TP??");
                             await GetControlOfEntity(spawnedHorse.Item1);
                             int pPID = API.PlayerPedId();
                             Vector3 playerPos = API.GetEntityCoords(pPID, true, true);
@@ -281,12 +295,14 @@ namespace vorpstables_cl
                     }
                     else
                     {
+                        Debug.WriteLine("Horse ocuppied");
                         TriggerEvent("vorp:Tip", GetConfig.Langs["HorseIsOcuppied"], 2000);
                     }
-                
+
                 }
                 else
                 {
+                    Debug.WriteLine("Horse dead?");
                     if (spawnedHorse.Item2.getHorseDeadTime() > 0)
                     {
                         TriggerEvent("vorp:Tip", string.Format(GetConfig.Langs["HorseIsDead"], spawnedHorse.Item2.getHorseName(), spawnedHorse.Item2.getHorseDeadTime()), 5000);
@@ -295,11 +311,12 @@ namespace vorpstables_cl
                     {
                         await SpawnHorseDefault();
                     }
-                    
+
                 }
             }
             else
             {
+                Debug.WriteLine("??? Horse ???");
                 TriggerEvent("vorp:Tip", GetConfig.Langs["NoDefaultHorses"], 2000);
             }
         }
@@ -375,7 +392,7 @@ namespace vorpstables_cl
 
             API.GetClosestRoad(playerPos.X + 10.0f, playerPos.Y + 10.0f, playerPos.Z, 0.0f, 25, ref spawnPos, ref spawnPos2, ref unk1, ref unk1, ref spawnHeading, true);
 
-            if(API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, spawnPos.X, spawnPos.Y, spawnPos.Z, false) > 25.0f)
+            if (API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, spawnPos.X, spawnPos.Y, spawnPos.Z, false) > 25.0f)
             {
                 spawnPos.X = playerPos.X + 10.0f;
                 spawnPos.Y = playerPos.Y + 10.0f;
@@ -572,7 +589,7 @@ namespace vorpstables_cl
 
         public async static Task DeleteDefaultHorse()
         {
-            if (spawnedHorse != null && spawnedHorse.Item1 !=-1)
+            if (spawnedHorse != null && spawnedHorse.Item1 != -1)
             {
                 int timeout = 0;
                 int horsePed = spawnedHorse.Item1;
