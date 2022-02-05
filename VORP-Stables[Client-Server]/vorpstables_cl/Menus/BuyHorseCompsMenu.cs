@@ -24,12 +24,26 @@ namespace vorpstables_cl.Menus
         private static Menu subMenuCatComplementsHorseLantern = new Menu(GetConfig.CompsLists.ElementAt(8).Key, "");
         private static Menu subMenuCatComplementsHorseMask = new Menu(GetConfig.CompsLists.ElementAt(9).Key, "");
 
+        private static int[] orderedIndexes = new int[10] { 4, 3, 0, 5, 6, 1, 2, 7, 8, 9 };
+
         private static MenuItem confirmBuy = new MenuItem("", " ")
         {
             RightIcon = MenuItem.Icon.STAR
         };
 
         private static bool setupDone = false;
+        /*
+         * subMenuCatComplementsHorseCrines - 4
+            subMenuCatComplementsHorseColas - 3
+            subMenuCatComplementsHorseMantas - 0
+            subMenuCatComplementsHorseMonturas - 5
+            subMenuCatComplementsHorseEstribos - 6
+            subMenuCatComplementsHorseCuernos - 1
+            subMenuCatComplementsHorseAlforjas - 2
+            subMenuCatComplementsHorsePetates - 7
+            subMenuCatComplementsHorseLantern - 8
+            subMenuCatComplementsHorseMask - 9
+         */
         private static void SetupMenu()
         {
             if (setupDone) return;
@@ -38,6 +52,23 @@ namespace vorpstables_cl.Menus
 
             MenuController.EnableMenuToggleKeyOnController = false;
             MenuController.MenuToggleKey = (Control)0;
+
+            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseCrines);
+            MenuItem buttonBuyComplementsCatCrines = new MenuItem(GetConfig.CompsLists.ElementAt(4).Key, "")
+            {
+                RightIcon = MenuItem.Icon.SADDLE
+            };
+            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatCrines);
+            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseCrines, buttonBuyComplementsCatCrines);
+
+
+            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseColas);
+            MenuItem buttonBuyComplementsCatColas = new MenuItem(GetConfig.CompsLists.ElementAt(3).Key, "")
+            {
+                RightIcon = MenuItem.Icon.SADDLE
+            };
+            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatColas);
+            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseColas, buttonBuyComplementsCatColas);
 
 
             MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseMantas);
@@ -48,8 +79,26 @@ namespace vorpstables_cl.Menus
             buyCompsMenu.AddMenuItem(buttonBuyComplementsCatMantas);
             MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseMantas, buttonBuyComplementsCatMantas);
 
-            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseCuernos);
 
+            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseMonturas);
+            MenuItem buttonBuyComplementsCatMonturas = new MenuItem(GetConfig.CompsLists.ElementAt(5).Key, "")
+            {
+                RightIcon = MenuItem.Icon.SADDLE
+            };
+            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatMonturas);
+            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseMonturas, buttonBuyComplementsCatMonturas);
+
+
+            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseEstribos);
+            MenuItem buttonBuyComplementsCatEstribos = new MenuItem(GetConfig.CompsLists.ElementAt(6).Key, "")
+            {
+                RightIcon = MenuItem.Icon.SADDLE
+            };
+            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatEstribos);
+            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseEstribos, buttonBuyComplementsCatEstribos);
+
+
+            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseCuernos);
             MenuItem buttonBuyComplementsCatCuernos = new MenuItem(GetConfig.CompsLists.ElementAt(1).Key, "")
             {
                 RightIcon = MenuItem.Icon.SADDLE
@@ -67,42 +116,6 @@ namespace vorpstables_cl.Menus
             buyCompsMenu.AddMenuItem(buttonBuyComplementsCatAlforjas);
             MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseAlforjas, buttonBuyComplementsCatAlforjas);
             
-            
-            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseColas);
-            MenuItem buttonBuyComplementsCatColas = new MenuItem(GetConfig.CompsLists.ElementAt(3).Key, "")
-            {
-                RightIcon = MenuItem.Icon.SADDLE
-            };
-            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatColas);
-            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseColas, buttonBuyComplementsCatColas);
-
-
-            
-            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseCrines);
-            MenuItem buttonBuyComplementsCatCrines = new MenuItem(GetConfig.CompsLists.ElementAt(4).Key, "")
-            {
-                RightIcon = MenuItem.Icon.SADDLE
-            };
-            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatCrines);
-            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseCrines, buttonBuyComplementsCatCrines);
-
-
-            
-            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseMonturas);
-            MenuItem buttonBuyComplementsCatMonturas = new MenuItem(GetConfig.CompsLists.ElementAt(5).Key, "")
-            {
-                RightIcon = MenuItem.Icon.SADDLE
-            };
-            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatMonturas);
-            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseMonturas, buttonBuyComplementsCatMonturas);
-
-            MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseEstribos);
-            MenuItem buttonBuyComplementsCatEstribos = new MenuItem(GetConfig.CompsLists.ElementAt(6).Key, "")
-            {
-                RightIcon = MenuItem.Icon.SADDLE
-            };
-            buyCompsMenu.AddMenuItem(buttonBuyComplementsCatEstribos);
-            MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseEstribos, buttonBuyComplementsCatEstribos);
            
             MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorsePetates);
             MenuItem buttonBuyComplementsCatPetates = new MenuItem(GetConfig.CompsLists.ElementAt(7).Key, "")
@@ -112,6 +125,7 @@ namespace vorpstables_cl.Menus
             buyCompsMenu.AddMenuItem(buttonBuyComplementsCatPetates);
             MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorsePetates, buttonBuyComplementsCatPetates);
 
+
             MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseLantern);
             MenuItem buttonBuyComplementsCatLantern = new MenuItem(GetConfig.CompsLists.ElementAt(8).Key, "")
             {
@@ -119,6 +133,7 @@ namespace vorpstables_cl.Menus
             };
             buyCompsMenu.AddMenuItem(buttonBuyComplementsCatLantern);
             MenuController.BindMenuItem(buyCompsMenu, subMenuCatComplementsHorseLantern, buttonBuyComplementsCatLantern);
+
 
             MenuController.AddSubmenu(buyCompsMenu, subMenuCatComplementsHorseMask);
             MenuItem buttonBuyComplementsCatMask = new MenuItem(GetConfig.CompsLists.ElementAt(9).Key, "")
@@ -140,7 +155,7 @@ namespace vorpstables_cl.Menus
                 }
                 else
                 {
-                    StablesShop.indexCategory = _index;
+                    StablesShop.indexCategory = orderedIndexes[_index];
                 }
 
 
